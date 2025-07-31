@@ -1,14 +1,13 @@
-const enquiryModel = require("../../Models/enquirymodel");
+const EnquiryModel = require("../../Models/enquirymodel");  // note capital 'E'
 
-let enquiryInsert=(request, response) => {
+let enquiryInsert = (request, response) => {
   let { sName, sEmail, sPhone, sMessage } = request.body;
 
-  // Validate required fields before attempting to save
   if (!sName || !sEmail || !sPhone || !sMessage) {
     return response.status(400).send("Missing required fields");
   }
 
-  let enquiry = new enquiryModel({
+  let enquiry = new EnquiryModel({
     name: sName,
     email: sEmail,
     phone: sPhone,
@@ -25,33 +24,29 @@ let enquiryInsert=(request, response) => {
     });
 };
 
+let enquiryList = async (request, response) => {
+  let enquiryList = await EnquiryModel.find();
+  response.status(200).json({ status: 1, message: "enquiry list", data: enquiryList });
+};
 
-let enquiryList=async(request,response)=>{
-    let enquiryList=await EnquiryModel.find();
-    response.status(200).json({status:1,message:"enquiry list",data:enquiryList});
-}
+let deleteEnquiry = async (request, response) => {
+  let enquiryid = request.params.id;
+  let delresponse = await EnquiryModel.deleteOne({ _id: enquiryid });
+  response.status(200).json({ status: 1, message: "enquiry deleted", id: enquiryid, delRes: delresponse });
+};
 
-let deleteEnquiry=async(request,response)=>{
-    let enquiryid=request.params.id;
-    let delresposne=await EnquiryModel.deleteOne({_id:enquiryid})
-    response.status(200).json({status:1,message:"enquiry delete",id:enquiryid,delRes:delresposne
+let updateenquiry = async (request, response) => {
+  let enquiryid = request.params.id;
+  let { sName, sEmail, sPhone, sMessage } = request.body;
+  let updateobj = {
+    name: sName,
+    email: sEmail,
+    phone: sPhone,
+    message: sMessage
+  };
 
-    });
-}
+  let updateenquiry = await EnquiryModel.updateOne({ _id: enquiryid }, updateobj);
+  response.status(200).json({ status: 1, message: "enquiry updated", updateenquiry });
+};
 
-let updateenquiry=async(request,response)=>{
-    let enquiryid=request.params.id;
-    let { sName, sEmail, sPhone, sMessage } = request.body;
-    let updateobj=({
-        name: sName,
-        email: sEmail,
-        phone: sPhone,
-        message: sMessage
-    });
-
-    let updateenquiry=await EnquiryModel.updateOne({_id:enquiryid},updateobj)
-    response.status(200).json({status:1,message:"enquiry delete",updateenquiry
-    });
-}
-
-module.exports={enquiryInsert,enquiryList,deleteEnquiry,updateenquiry}
+module.exports = { enquiryInsert, enquiryList, deleteEnquiry, updateenquiry };

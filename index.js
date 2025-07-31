@@ -1,15 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const { enquiryInsert, enquiryList, deleteEnquiry, updateenquiry } = require('./App/Controllers/web/userEnquiryController');
+const { enquiryroutes } = require('./App/Routes/web/Enquiryroutes');
+
+
 require('dotenv').config();
 
 const app = express();
 app.use(express.json());
 
-app.post("/api/enquiry-insert",enquiryInsert );
-app.get("/api/enquiry-list",enquiryList);
-app.delete("/api/enquiry-delete/:id",deleteEnquiry);
-app.put("/api/enquiry-update/:id",updateenquiry);
+app.use("/web/api/enquiry",enquiryroutes)
 
 const port = 8000;
 mongoose.connect(process.env.DBUrl)
