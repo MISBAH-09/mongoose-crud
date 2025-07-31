@@ -33,7 +33,15 @@ app.post("/api/enquiry-insert", (request, response) => {
 
 app.get("/api/enquiry-list",async(request,response)=>{
     let enquiryList=await EnquiryModel.find();
-    response.status(200).json({status:1,message:"enquiey list",data:enquiryList});
+    response.status(200).json({status:1,message:"enquiry list",data:enquiryList});
+})
+
+app.delete("/api/enquiry-delete/:id",async(request,response)=>{
+    let enquiryid=request.params.id;
+    let delresposne=await EnquiryModel.deleteOne({_id:enquiryid})
+    response.status(200).json({status:1,message:"enquiry delete",id:enquiryid,delRes:delresposne
+
+    });
 })
 
 // Hardcoded port 8000
