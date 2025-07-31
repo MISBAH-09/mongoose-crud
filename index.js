@@ -44,6 +44,22 @@ app.delete("/api/enquiry-delete/:id",async(request,response)=>{
     });
 })
 
+app.put("/api/enquiry-update/:id",async(request,response)=>{
+    let enquiryid=request.params.id;
+    let { sName, sEmail, sPhone, sMessage } = request.body;
+    let updateobj=({
+        name: sName,
+        email: sEmail,
+        phone: sPhone,
+        message: sMessage
+    });
+
+    let updateenquiry=await EnquiryModel.updateOne({_id:enquiryid},updateobj)
+    response.status(200).json({status:1,message:"enquiry delete",updateenquiry
+    });
+})
+
+
 // Hardcoded port 8000
 const port = 8000;
 
